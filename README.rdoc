@@ -32,10 +32,11 @@ To access Fusion Tables in more advanced ways, you will need to setup the fusion
   $ unicorn
   navigate to http://localhost:8080/location_list to see a demonstration
 
-When you want to deploy to Heroku, you will need to set your account and password as Heroku config variables. For more info, see https://devcenter.heroku.com/articles/config-vars
+When you want to deploy to Heroku, you will need to set your account, password and [api key](https://code.google.com/apis/console/) as Heroku config variables. For more info, see https://devcenter.heroku.com/articles/config-vars
 
   $ heroku config:add google_account=youraccount
   $ heroku config:add google_password=yourpassword
+  $ heroku config:add google_api_key=yourapikey
 
 == Caching
 
