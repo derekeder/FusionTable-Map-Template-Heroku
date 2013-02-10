@@ -29,6 +29,7 @@ module FusionTemplate
     get "/" do
       # uncomment this line to cache this route
       # cache_control :public, max_age: 1800  # 30 min
+      
       @current_menu = "home"
       haml :index
     end
@@ -47,6 +48,9 @@ module FusionTemplate
     get "/location_list" do
       @current_menu = "location_list"
       if defined? FT
+        # uncomment this line to cache this route
+        # cache_control :public, max_age: 1800  # 30 min
+        
         # note: the fusion_tables gem can only access tables based on the numeric ID of the table
         @recycling_locations = FT.execute("SELECT * FROM #{FusionTableId};")
         haml :location_list
@@ -58,6 +62,9 @@ module FusionTemplate
     # catchall for static pages
     get "/:page/?" do
       begin 
+        # uncomment this line to cache this route
+        # cache_control :public, max_age: 1800  # 30 min
+        
         @current_menu = params[:page]
         @title = params[:page].capitalize.gsub(/[_-]/, " ") + " - Searchable Map Template - Heroku Ready"
         @page_path = params[:page]
