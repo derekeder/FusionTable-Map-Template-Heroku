@@ -33,6 +33,16 @@ module FusionTemplate
       haml :index
     end
 
+    # utility for flushing cache
+    get "/flush_cache" do
+      if memcache_servers = ENV["MEMCACHE_SERVERS"]
+        require 'dalli'
+        dc = Dalli::Client.new
+        dc.flush
+      end
+      redirect "/"
+    end
+
     # note: the fusion_tables gem can only access tables based on the numeric ID of the table
     get "/location_list" do
       @current_menu = "location_list"
