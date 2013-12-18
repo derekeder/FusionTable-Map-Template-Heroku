@@ -31,8 +31,8 @@ var MapsLib = {
 
   map_centroid:       new google.maps.LatLng(41.8781136, -87.66677856445312), //center that your map defaults to
   locationScope:      "chicago",      //geographical area appended to all address searches
-  recordName:         "location",       //for showing number of results
-  recordNamePlural:   "locations",
+  recordName:         "result",       //for showing number of results
+  recordNamePlural:   "results",
 
   searchRadius:       805,            //in meters ~ 1/2 mile
   defaultZoom:        11,             //zoom level when map is loaded (bigger is more zoomed in)
@@ -61,36 +61,13 @@ var MapsLib = {
 
     MapsLib.searchrecords = null;
 
-     //reset filters
-    $(":checkbox").attr("checked", false);
-
-    var loadAddress = MapsLib.convertToPlainString($.address.parameter('address'));
-    $("#search_address").val(loadAddress);
-
+    //reset filters
+    $("#search_address").val(MapsLib.convertToPlainString($.address.parameter('address')));
     var loadRadius = MapsLib.convertToPlainString($.address.parameter('radius'));
     if (loadRadius != "") $("#search_radius").val(loadRadius);
     else $("#search_radius").val(MapsLib.searchRadius);
-
-    if ($.address.parameter('condoms') == "1")
-      $("#filter_condoms").attr("checked", true);
-    else
-      $("#filter_condoms").attr("checked", false);
-
-    if ($.address.parameter('sti') == "1")
-      $("#filter_sti").attr("checked", true);
-    else
-      $("#filter_sti").attr("checked", false);
-
-    if ($.address.parameter('pregnancy') == "1")
-      $("#filter_pregnancy").attr("checked", true);
-    else
-      $("#filter_pregnancy").attr("checked", false);
-
-    var filter_type = MapsLib.convertToPlainString($.address.parameter('filter_type'));
-    $("#filter_type").val(filter_type);
-
-    if ($.address.parameter('view_mode') != undefined)
-      MapsLib.setResultsView($.address.parameter('view_mode'));
+    $(":checkbox").attr("checked", "checked");
+    $("#result_count").hide();
 
     //run the default search
     MapsLib.doSearch();
@@ -103,24 +80,7 @@ var MapsLib = {
 
     var whereClause = MapsLib.locationColumn + " not equal to ''";
 
-    //checkbox filters
-    if ( $("#filter_condoms").is(':checked')) {
-      whereClause += " AND condoms = 1";
-      $.address.parameter('condoms', "1");
-    }
-    else $.address.parameter('condoms', '');
-
-    if ( $("#filter_sti").is(':checked')) {
-      whereClause += " AND sti = 1";
-      $.address.parameter('sti', "1");
-    }
-    else $.address.parameter('sti', '');
-
-    if ( $("#filter_pregnancy").is(':checked')) {
-      whereClause += " AND pregnancy = 1";
-      $.address.parameter('pregnancy', "1");
-    }
-    else $.address.parameter('pregnancy', '');
+    //-----custom filters-------
 
     //-------end of custom filters--------
 
@@ -186,128 +146,6 @@ var MapsLib = {
       MapsLib.addrMarker.setMap(null);
     if (MapsLib.searchRadiusCircle != null)
       MapsLib.searchRadiusCircle.setMap(null);
-  },
-
-  // //clear map markers
-  //   if (MapsLib.markers) {
-  //     for (i in MapsLib.markers) {
-  //       MapsLib.markers[i].setMap(null);
-  //     }
-  //     google.maps.event.clearListeners(map, 'click');
-  //     MapsLib.markers = [];
-  //   }
-  // },
-
-  setResultsView: function(view_mode) {
-    var element = $('#view_mode');
-    if (view_mode == undefined)
-      view_mode = 'map';
-
-    if (view_mode == 'map') {
-      $('#listCanvas').hide();
-      $('#mapCanvas').show();
-      google.maps.event.trigger(map, 'resize');
-      map.setCenter(MapsLib.map_centroid);
-      MapsLib.doSearch();
-
-      element.html('Show list <i class="icon-list icon-white"></i>');
-    }
-    else {
-      $('#listCanvas').show();
-      $('#mapCanvas').hide();
-
-      element.html('Show map <i class="icon-map-marker icon-white"></i>');
-
-    }
-    return false;
-  },
-
-  getResults: function(whereClause, location) {
-    var selectColumns = "slug, name, location, county, hours, latitude, longitude ";
-    MapsLib.query(selectColumns, whereClause, "", "MapsLib.renderResults");
-  },
-
-  renderResults: function(json) {
-    //console.log(MapsLib.markers);
-    MapsLib.handleError(json);
-    var data = json["rows"];
-    var template = "";
-
-    var results = $("#resultsList");
-    results.hide().empty(); //hide the existing list and empty it out first
-
-    if (data == null) {
-      //clear results list
-      results.append("<li><span class='lead'>No results found</span></li>");
-    }
-    else {
-      for (var row in data) {
-        MapsLib.addMarker(data[row]);
-
-        template = "\
-          <div class='row-fluid item-list'>\
-            <div class='span8'>\
-              <a href='/location/" + data[row][0] + "'>\
-                <span class='lead'>" + data[row][1] + "</span>\
-              </a>\
-              <br />\
-              " + data[row][2] + "\
-              <br />\
-              " + data[row][3] + "\
-              <br />\
-              " + data[row][4] + "\
-            </div>\
-          </div>"
-
-            // <div class='span4 pull-right hidden-phone'>\
-            //   <a href='/location/" + data[row][0] + "'>\
-            //     <img class='img-polaroid' src='/location/" + data[row][0] + "/m/image.jpg' alt='" + data[row][1] + "' title='" + data[row][1] + "'/>\
-            //   </a>\
-            // </div>\
-
-        results.append(template);
-      }
-    }
-    var resultCount = 0;
-    if (data != undefined)
-      resultCount = data.length;
-    MapsLib.displaySearchCount(resultCount);
-    results.fadeIn(); //tada!
-  },
-
-  addMarker: function(record) {
-    var coordinate = new google.maps.LatLng(record[5],record[6])
-    var marker = new google.maps.Marker({
-      map: map,
-      position: coordinate,
-      icon: new google.maps.MarkerImage(MapsLib.markerImage)
-    });
-    MapsLib.markers.push(marker);
-
-    var content = "\
-        <div class='googft-info-window' style='font-family: sans-serif'>\
-          <a href='/location/" + record[0] + "'>\
-            <span class='lead'>" + record[1] + "</span>\
-          </a>\
-          <br />\
-          " + record[2] + "\
-          <br />\
-          " + record[3] + "\
-          <br />\
-          " + record[4] + "\
-        </div>";
-
-    //add a click listener to the marker to open an InfoWindow,
-    google.maps.event.addListener(marker, 'click', function(event) {
-      if(MapsLib.infoWindow) MapsLib.infoWindow.close();
-
-      MapsLib.infoWindow = new google.maps.InfoWindow( {
-        position: coordinate,
-        content: content
-      });
-      MapsLib.infoWindow.open(map);
-    });
-
   },
 
   findMe: function() {
