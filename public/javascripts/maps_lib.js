@@ -78,9 +78,24 @@ var MapsLib = {
     var address = $("#search_address").val();
     MapsLib.searchRadius = $("#search_radius").val();
 
-    var whereClause = MapsLib.locationColumn + " not equal to ''";
+    var whereClause = ""; //MapsLib.locationColumn + " not equal to ''";
 
     //-----custom filters-------
+    
+    var whereOptions = [ ];
+    if( $("#filter_condoms")[0].checked == false ){
+      whereOptions.push( "Condoms = 0" );
+    }
+    if( $("#filter_STI")[0].checked == false ){
+      whereOptions.push( "STI = 0" );
+    }
+    if( $("#filter_pregnancy")[0].checked == false ){
+      whereOptions.push( "Pregnancy = 0" );
+    }
+    
+    if(whereOptions.length != 0){
+      whereClause += whereOptions.join(" AND ") + " ";
+    }
 
     //-------end of custom filters--------
 
@@ -104,8 +119,11 @@ var MapsLib = {
             animation: google.maps.Animation.DROP,
             title:address
           });
-
-          whereClause += " AND ST_INTERSECTS(" + MapsLib.locationColumn + ", CIRCLE(LATLNG" + MapsLib.currentPinpoint.toString() + "," + MapsLib.searchRadius + "))";
+          
+          if(whereClause != ""){
+            whereClause += " AND ";
+          }
+          whereClause += "ST_INTERSECTS(" + MapsLib.locationColumn + ", CIRCLE(LATLNG" + MapsLib.currentPinpoint.toString() + "," + MapsLib.searchRadius + "))";
 
           MapsLib.drawSearchRadiusCircle(MapsLib.currentPinpoint);
           MapsLib.submitSearch(whereClause, map, MapsLib.currentPinpoint);
@@ -116,6 +134,9 @@ var MapsLib = {
       });
     }
     else { //search without geocoding callback
+      if(whereClause == ""){
+        whereClause = "STI > -1";
+      }
       MapsLib.submitSearch(whereClause, map);
     }
   },
