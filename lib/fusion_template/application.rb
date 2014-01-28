@@ -24,7 +24,7 @@ module FusionTemplate
 
     helpers FusionTemplate::HtmlHelpers
 
-    FusionTableId = '1m4Ez9xyTGfY2CU6O-UgEcPzlS0rnzLU93e4Faa0'
+    FusionTableId = '1NuGpwXnzeyfBZcN-_GCwRzM_F4kh7EZzOnzyOUA'
     
     get "/" do
       # uncomment this line to cache this route
@@ -50,7 +50,9 @@ module FusionTemplate
         # cache_control :public, max_age: 1800  # 30 min
         
         # note: the fusion_tables gem can only access tables based on the numeric ID of the table
-        @recycling_locations = FT.execute("SELECT * FROM #{FusionTableId};")
+        @condom_dist_locations = FT.execute("SELECT * FROM #{FusionTableId};")
+        @sti_clinics = FT.execute("SELECT * FROM #{FusionTableId};")
+        @abortion_clinics = FT.execute("SELECT * FROM #{FusionTableId};")
         haml :location_list
       else
         "fusion_tables gem not setup yet! You need to set your Google account and password in config/config.yml"
