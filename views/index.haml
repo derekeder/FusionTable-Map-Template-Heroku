@@ -4,7 +4,8 @@
       The
       %a{:href => "/about"} Illinos Sex Help app
       is a convenient way to locate the sexual health resources available in your area.
-      .br
+      %br
+      %br
       Need help?
       %a{:href => "/about"} read more »
     .well
@@ -17,45 +18,45 @@
       %label
         within
         %select#search_radius.input-small
-          %option{:value => "400"} 2 blocks
-          %option{:value => "805"} 1/2 mile
           %option{:value => "1610"} 1 mile
           %option{:value => "3220"} 2 miles
+          %option{:value => "8050"} 5 miles
+          %option{:value => "16100"} 10 miles
       
       %input#search.btn.btn-primary{:type => "button", :value => "Search"}
       %button#reset.btn Reset
 
     .well
-      / Once you decide what filter you want, place the HTML code here. The section in the maps_lib.js is also marked. Once you're done, feel free to delete this explanatory section.
-      %h4 Custom filters and views
       %p
-        %strong What resources are around me? …
+        %strong What's near me?
+        %br
         %br
 
-        %label.checkbox.inline
+        %label.checkbox
           %input#filter_condoms{:type => "checkbox"}
           %span{:rel => "popover", :"data-content" => "Condom Distributon Sites", :"data-original-title" => "<h4>Condom Distribution Sites</h4>"}
             Free Condoms
+            %br
 
-        %label.checkbox.inline
+        %label.checkbox
           %input#filter_STI{:type => "checkbox"}
-          %span{:rel => "popover", :"data-content" => "Locations that offer training and courses on using computers.", :"data-original-title" => "<h4>Technology training</h4>"}
-            Training
+          %span{:rel => "popover", :"data-content" => "Locations that offer training and courses on using computers.", :"data-original-title" => "<h4>STI Clinics</h4>"}
+            STI Clinics
+            %br
 
-        %label.checkbox.inline
+        %label.checkbox
           %input#filter_pregnancy{:type => "checkbox"}
-          %span{:rel => "popover", :"data-content" => "Locations that offer free wireless internet access.", :"data-original-title" => "<h4>Wifi</h4>"}
-            Wi-Fi
+          %span{:rel => "popover", :"data-content" => "Locations that offer free wireless internet access.", :"data-original-title" => "<h4>Abortion Clinics</h4>"}
+            Abortion Clinics
+            %br
 
     %p.alert.alert-info.lead#result_count
 
   .span8
     #map_canvas
     %span.pull-right
-      %a{:href => "http://derekeder.com/searchable_map_template/"} Searchable Map Template
-      by
-      = succeed "." do
-        %a{:href => "http://derekeder.com"} Derek Eder
+      Much love to
+      %a{:href => "http://derekeder.com/searchable_map_template/"}Derek Eder's Searchable Map Template
 
 - content_for :javascripts do
   = include_javascript :"jquery.address.min"
