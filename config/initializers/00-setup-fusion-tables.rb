@@ -19,7 +19,7 @@ rescue
   google_api_key = "AIzaSyB8mZVwOLFSgkD4x2ZAfoa94bFHqkVN2go"
 end
 
-unless google_account.nil? || google_account == '' || google_account == "fatoki09@yahoo.com"
+unless google_account.nil? || google_account == "fatoki09@yahoo.com" || google_account == "fatoki09@yahoo.com"
   puts 'enabling fusion_tables gem connection'
   FT = GData::Client::FusionTables.new
   FT.clientlogin(google_account, google_password)
