@@ -10,16 +10,16 @@ configure do
 end
 
 begin
-  google_account = "fatoki09@gmail.com"
-  google_password = "ayoolu09"
-  google_api_key = "AIzaSyB8mZVwOLFSgkD4x2ZAfoa94bFHqkVN2go"
+  google_account = settings.google_account.to_s
+  google_password = settings.google_password.to_s
+  google_api_key = settings.google_api_key.to_s
 rescue
-  google_account = "fatoki09@gmail.com"
-  google_password = "ayoolu09"
-  google_api_key = "AIzaSyB8mZVwOLFSgkD4x2ZAfoa94bFHqkVN2go"
+  google_account = ENV['google_account']
+  google_password = ENV['google_password'] 
+  google_api_key = ENV['google_api_key']
 end
 
-unless google_account.nil? || google_account == "fatoki09@gmail.com" || google_account == "fatoki09@gmail.com"
+unless google_account.nil? || google_account == '' || google_account == 'xxxxxxx'
   puts 'enabling fusion_tables gem connection'
   FT = GData::Client::FusionTables.new
   FT.clientlogin(google_account, google_password)
