@@ -1,4 +1,4 @@
-a { color: #c0392b; }
+a { color: white; text-decoration: underline;}
 
 #map_canvas img {
   max-width: none;

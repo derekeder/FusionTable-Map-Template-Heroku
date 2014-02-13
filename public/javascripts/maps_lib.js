@@ -89,9 +89,9 @@ var MapsLib = {
     if( $("#filter_STI")[0].checked == false ){
       whereOptions.push( "STI = 0" );
     }
-    if( $("#filter_pregnancy")[0].checked == false ){
-      whereOptions.push( "Pregnancy = 0" );
-    }
+    // if( $("#filter_pregnancy")[0].checked == false ){
+    //   whereOptions.push( "Pregnancy = 0" );
+    // }
     
     if(whereOptions.length != 0){
       whereClause += whereOptions.join(" AND ") + " ";
