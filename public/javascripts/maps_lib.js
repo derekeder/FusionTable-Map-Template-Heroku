@@ -35,7 +35,7 @@ var MapsLib = {
   recordNamePlural:   "results",
 
   searchRadius:       805,            //in meters ~ 1/2 mile
-  defaultZoom:        11,             //zoom level when map is loaded (bigger is more zoomed in)
+  defaultZoom:        10,             //zoom level when map is loaded (bigger is more zoomed in)
   addrMarkerImage: 'http://derekeder.com/images/icons/blue-pushpin.png',
   currentPinpoint: null,
 
@@ -89,9 +89,6 @@ var MapsLib = {
     if( $("#filter_STI")[0].checked == false ){
       whereOptions.push( "STI = 0" );
     }
-    // if( $("#filter_pregnancy")[0].checked == false ){
-    //   whereOptions.push( "Pregnancy = 0" );
-    // }
     
     if(whereOptions.length != 0){
       whereClause += whereOptions.join(" AND ") + " ";
