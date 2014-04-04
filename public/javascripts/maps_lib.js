@@ -18,16 +18,16 @@ var MapsLib = {
 
   //the encrypted Table ID of your Fusion Table (found under File => About)
   //NOTE: numeric IDs will be depricated soon
-  fusionTableId:      "1m4Ez9xyTGfY2CU6O-UgEcPzlS0rnzLU93e4Faa0",
+  fusionTableId:      "1NuGpwXnzeyfBZcN-_GCwRzM_F4kh7EZzOnzyOUA",
 
   //*New Fusion Tables Requirement* API key. found at https://code.google.com/apis/console/
   //*Important* this key is for demonstration purposes. please register your own.
-  googleApiKey:       "AIzaSyA3FQFrNr5W2OEVmuENqhb2MBB2JabdaOY",
+  googleApiKey:       "AIzaSyB8mZVwOLFSgkD4x2ZAfoa94bFHqkVN2go",
 
   //name of the location column in your Fusion Table.
   //NOTE: if your location column name has spaces in it, surround it with single quotes
   //example: locationColumn:     "'my location'",
-  locationColumn:     "geometry",
+  locationColumn:     "Location",
 
   map_centroid:       new google.maps.LatLng(41.8781136, -87.66677856445312), //center that your map defaults to
   locationScope:      "chicago",      //geographical area appended to all address searches
@@ -35,7 +35,7 @@ var MapsLib = {
   recordNamePlural:   "results",
 
   searchRadius:       805,            //in meters ~ 1/2 mile
-  defaultZoom:        11,             //zoom level when map is loaded (bigger is more zoomed in)
+  defaultZoom:        10,             //zoom level when map is loaded (bigger is more zoomed in)
   addrMarkerImage: 'http://derekeder.com/images/icons/blue-pushpin.png',
   currentPinpoint: null,
 
@@ -78,9 +78,21 @@ var MapsLib = {
     var address = $("#search_address").val();
     MapsLib.searchRadius = $("#search_radius").val();
 
-    var whereClause = MapsLib.locationColumn + " not equal to ''";
+    var whereClause = ""; //MapsLib.locationColumn + " not equal to ''";
 
     //-----custom filters-------
+    
+    var whereOptions = [ ];
+    if( $("#filter_condoms")[0].checked == false ){
+      whereOptions.push( "Condoms = 0" );
+    }
+    if( $("#filter_STI")[0].checked == false ){
+      whereOptions.push( "STI = 0" );
+    }
+    
+    if(whereOptions.length != 0){
+      whereClause += whereOptions.join(" AND ") + " ";
+    }
 
     //-------end of custom filters--------
 
@@ -104,8 +116,11 @@ var MapsLib = {
             animation: google.maps.Animation.DROP,
             title:address
           });
-
-          whereClause += " AND ST_INTERSECTS(" + MapsLib.locationColumn + ", CIRCLE(LATLNG" + MapsLib.currentPinpoint.toString() + "," + MapsLib.searchRadius + "))";
+          
+          if(whereClause != ""){
+            whereClause += " AND ";
+          }
+          whereClause += "ST_INTERSECTS(" + MapsLib.locationColumn + ", CIRCLE(LATLNG" + MapsLib.currentPinpoint.toString() + "," + MapsLib.searchRadius + "))";
 
           MapsLib.drawSearchRadiusCircle(MapsLib.currentPinpoint);
           MapsLib.submitSearch(whereClause, map, MapsLib.currentPinpoint);
@@ -116,6 +131,9 @@ var MapsLib = {
       });
     }
     else { //search without geocoding callback
+      if(whereClause == ""){
+        whereClause = "STI > -1";
+      }
       MapsLib.submitSearch(whereClause, map);
     }
   },

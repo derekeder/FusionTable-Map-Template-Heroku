@@ -1,14 +1,13 @@
 .row-fluid
   .span4
     %p
-      This is a demo of
-      %a{:href => "http://derekeder.com"} Derek Eder's
-      %a{:href => "http://derekeder.com/searchable_map_template/"} Searchable Map Template
-      using Google
-      = succeed "." do
-        %a{:href => "http://support.google.com/fusiontables/answer/2571232?hl=en&ref_topic=1652595"} Fusion Tables
-      Use this section to give a little context your map. Maybe a link to
-      %a{:href => "#"} read more »
+      The
+      %a{:href => "/about"} Illinois Sexual Health app
+      is a convenient way to locate free sexual health resources in your area.
+      %br
+      %br
+      Need help?
+      %a{:href => "/about"} read more »
     .well
       %h4
         Address
@@ -19,40 +18,38 @@
       %label
         within
         %select#search_radius.input-small
-          %option{:value => "400"} 2 blocks
-          %option{:value => "805"} 1/2 mile
-          %option{:value => "1610"} 1 mile
           %option{:value => "3220"} 2 miles
+          %option{:value => "8050"} 5 miles
+          %option{:value => "16100"} 10 miles
       
       %input#search.btn.btn-primary{:type => "button", :value => "Search"}
       %button#reset.btn Reset
 
     .well
-      / Once you decide what filter you want, place the HTML code here. The section in the maps_lib.js is also marked. Once you're done, feel free to delete this explanatory section.
-      %h4 Custom filters and views
       %p
-        Take a look at the
-        %a{:href => "https://github.com/derekeder/FusionTable-Map-Template/wiki/Filter-examples"} wiki
-        to see how to add your own custom filters and views like:
-      %ul
-        %li
-          %a{:href => "https://github.com/derekeder/FusionTable-Map-Template/wiki/Filter-examples#wiki-checkboxes"} Checkboxes
-        %li
-          %a{:href => "https://github.com/derekeder/FusionTable-Map-Template/wiki/Filter-examples#wiki-radiobuttons"} Radio buttons
-        %li
-          %a{:href => "https://github.com/derekeder/FusionTable-Map-Template/wiki/Filter-examples#wiki-textsearches"} Text searches
-        %li
-          %a{:href => "https://github.com/derekeder/FusionTable-Map-Template/wiki/List-search-results"} Results lists
+        %strong What's near me?
+        %br
+        %br
+
+        %label.checkbox
+          %input#filter_condoms{:type => "checkbox"}
+          %span{:rel => "popover", :"data-content" => "Condom Distributon Sites", :"data-original-title" => "<h4>Condom Distribution Sites</h4>"}
+            Free Condoms
+            %br
+
+        %label.checkbox
+          %input#filter_STI{:type => "checkbox"}
+          %span{:rel => "popover", :"data-content" => "Locations that offer testing for sexually transmitted infections and more.", :"data-original-title" => "<h4>STI Clinics</h4>"}
+            STI Clinics
+            %br
 
     %p.alert.alert-info.lead#result_count
 
   .span8
     #map_canvas
     %span.pull-right
-      %a{:href => "http://derekeder.com/searchable_map_template/"} Searchable Map Template
-      by
-      = succeed "." do
-        %a{:href => "http://derekeder.com"} Derek Eder
+      Much love to
+      %a{:href => "http://derekeder.com/searchable_map_template/"}Derek Eder's Searchable Map Template
 
 - content_for :javascripts do
   = include_javascript :"jquery.address.min"
